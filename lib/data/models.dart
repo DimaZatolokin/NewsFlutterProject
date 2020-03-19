@@ -18,7 +18,7 @@ class Article {
         json['title'],
         json['description'],
         json['url'],
-        json['urlToImage'],
+        json['urlToImage'] == null ? "" : json['urlToImage'],
         json['publishedAt'],
         json['content']);
   }

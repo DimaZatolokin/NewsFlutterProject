@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newsflutterprogect/data/models.dart';
 import 'package:newsflutterprogect/data/network/network.dart';
+import 'package:newsflutterprogect/presentation/utils.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -11,15 +12,8 @@ class MainPage extends StatefulWidget {
 }
 
 class MainState extends State<MainPage> {
-  //List _items = <Widget>[];
   Future<List<Article>> news;
   List<Article> items;
-
-  /*updateItems(List<Widget> items) {
-    setState(() {
-      //_items = items;
-    });
-  }*/
 
   void updateItems(List<Article> articles) {
     setState(() {
@@ -31,19 +25,7 @@ class MainState extends State<MainPage> {
   void initState() {
     super.initState();
     print("initState()");
-    /*print("init state");
-    _items.clear();
-    for (int i = 0; i < 50; i++) {
-      _items.add(getRow(i));
-    }*/
-    NetworkDataSource.loadAllNews().then((value) =>
-    {
-     /* value.forEach((element) {
-        print("items loaded ${element.content}");
-      }),*/
-     // items = value
-      updateItems(value)
-    });
+    NetworkDataSource.loadAllNews().then((value) => {updateItems(value)});
   }
 
   @override
@@ -54,6 +36,7 @@ class MainState extends State<MainPage> {
       );
     } else {
       return ListView.builder(
+          itemCount: items.length,
           itemBuilder: (BuildContext context, int position) {
             return getRow(position);
           });
@@ -61,13 +44,80 @@ class MainState extends State<MainPage> {
   }
 
   Widget getRow(int position) {
-    return Center(
-      child: Text(items[position].content),
+    var item = items[position];
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(7.0)),
+            border: Border(
+                top: BorderSide(),
+                left: BorderSide(),
+                bottom: BorderSide(),
+                right: BorderSide())),
+        margin: EdgeInsets.all(10),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(
+            flex: 1,
+            child:
+                Column(children: [getImageWidget(item), getAuthorWidget(item)]),
+          ),
+          Expanded(
+              flex: 4,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 3,
+                        child: getTitleWidget(item),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: getDateWidget(item),
+                      )
+                    ],
+                  ),
+                  Center(
+                    child: getDescriptionWidget(item),
+                  )
+                ],
+              )),
+        ]));
+  }
+
+  Text getDescriptionWidget(Article item) =>
+      Text(item.description, style: TextStyle(fontSize: 11));
+
+  Text getDateWidget(Article item) {
+    return Text(
+      DateTimeUtils.getReadableDate(item.publishedAt),
+      style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic),
     );
   }
 
-/*void updateItems() async {
-    items = await news;
-  }*/
+  Text getTitleWidget(Article item) {
+    return Text(item.title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+            fontSize: 12, color: Colors.black, fontWeight: FontWeight.bold));
+  }
 
+  Positioned getAuthorWidget(Article item) {
+    return new Positioned(
+        bottom: 0,
+        child: new Align(
+          alignment: FractionalOffset.bottomCenter,
+          child: Text(
+            item.author == null ? "" : item.author,
+            style: TextStyle(fontSize: 12),
+            maxLines: 1,
+          ),
+        ));
+  }
+
+  Image getImageWidget(Article item) {
+    return Image.network(
+      item.urlToImage,
+    );
+  }
 }

@@ -7,7 +7,7 @@ import 'package:newsflutterprogect/data/network/responses.dart';
 class NetworkDataSource {
   static Future<List<Article>> loadAllNews() async {
     String url =
-        "http://newsapi.org/v2/everything?q=bitcoin&from=2020-02-17&sortBy=publishedAt&apiKey=2193e64fdf2346a7ae1461a9f48ac755";
+        "http://newsapi.org/v2/everything?q=bitcoin&from=2020-02-19&sortBy=publishedAt&apiKey=2193e64fdf2346a7ae1461a9f48ac755";
     Response response = await get(url);
     if (response.statusCode == 200) {
       LoadNewsResponse loadNewsResponse =
