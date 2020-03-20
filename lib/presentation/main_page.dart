@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:newsflutterprogect/data/models.dart';
 import 'package:newsflutterprogect/data/network/network.dart';
+import 'package:newsflutterprogect/data/repository.dart';
 import 'package:newsflutterprogect/presentation/utils.dart';
 
 class MainPage extends StatefulWidget {
@@ -14,6 +16,7 @@ class MainPage extends StatefulWidget {
 class MainState extends State<MainPage> {
   Future<List<Article>> news;
   List<Article> items;
+  bool _loading;
 
   void updateItems(List<Article> articles) {
     setState(() {
@@ -25,12 +28,22 @@ class MainState extends State<MainPage> {
   void initState() {
     super.initState();
     print("initState()");
-    NetworkDataSource.loadAllNews().then((value) => {updateItems(value)});
+    _loadNews();
+  }
+
+  void _loadNews() {
+    _loading = true;
+    RepositoryImpl(NetworkDataSourceImpl(FlutterSecureStorage()))
+        .getTodayEconomyNews()
+        .then((value) => {_loading = false, updateItems(value)});
   }
 
   @override
   Widget build(BuildContext context) {
-    if (items == null || items.isEmpty) {
+    print("buiiiiiild");
+    if (_loading) {
+      return Center(child: CircularProgressIndicator());
+    } else if (items == null || items.isEmpty) {
       return Center(
         child: Text("No news"),
       );
