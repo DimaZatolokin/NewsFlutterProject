@@ -18,8 +18,9 @@ class NetworkDataSourceImpl implements NetworkDataSource {
   NetworkDataSourceImpl(this._secureStorage);
 
   Future<List<Article>> loadNewsByKey(String key) async {
+    var apiKey = await _secureStorage.read(key: KEY_NEWS_API_KEY);
     String url =
-        "${_ApiUrls.BASE_URL}${_ApiUrls.END_POINT_EVETYTHING}?q=$key&from=${DateTimeUtils.getDateInServerFormat(DateTime.now())}&sortBy=publishedAt&apiKey=${await _secureStorage.read(key: KEY_NEWS_API_KEY)}";
+        "${_ApiUrls.BASE_URL}${_ApiUrls.END_POINT_EVETYTHING}?q=$key&from=${DateTimeUtils.getDateInServerFormat(DateTime.now())}&sortBy=publishedAt&apiKey=2193e64fdf2346a7ae1461a9f48ac755";
     print("loadNewsByKey url = $url");
     Response response = await get(url);
     if (response.statusCode == 200) {

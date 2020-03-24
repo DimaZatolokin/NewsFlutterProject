@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class Article {
   final Source source;
   final String author;
@@ -13,7 +15,7 @@ class Article {
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
-        Source.fromJson(json['source']),
+        /*Source.fromJson(json['source']),*/Source("15", "SomeSource"),
         json['author'] == null ? "" : json['author'],
         json['title'] == null ? "" : json['title'],
         json['description'] == null ? "" : json['description'],
@@ -22,6 +24,17 @@ class Article {
         json['publishedAt'] == null ? "" : json['publishedAt'],
         json['content'] == null ? "" : json['content']);
   }
+
+  Map<String, dynamic> toJson() => {
+        "id": Random().nextInt(1000),
+        "author": author,
+        "title": title,
+        "description": description,
+        "url": url,
+        "urlToImage": urlToImage,
+        "publishedAt": publishedAt,
+        "content": content
+      };
 }
 
 class Source {
@@ -31,6 +44,6 @@ class Source {
   Source(this.id, this.name);
 
   factory Source.fromJson(Map<String, dynamic> json) {
-    return Source(json['id'], json['name']);
+    return Source(json['id'] != null ? json['id'] : "", json['name'] != null ? json['name'] : "");
   }
 }

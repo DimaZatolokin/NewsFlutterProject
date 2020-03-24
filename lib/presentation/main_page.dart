@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:newsflutterprogect/data/database/database.dart';
 import 'package:newsflutterprogect/data/models.dart';
 import 'package:newsflutterprogect/data/network/network.dart';
 import 'package:newsflutterprogect/data/repository.dart';
@@ -33,9 +34,20 @@ class MainState extends State<MainPage> {
 
   void _loadNews() {
     _loading = true;
-    RepositoryImpl(NetworkDataSourceImpl(FlutterSecureStorage()))
+    var repository = RepositoryImpl(
+        NetworkDataSourceImpl(FlutterSecureStorage()), DBProvider.dbProvider);
+    repository
         .getTodayEconomyNews()
-        .then((value) => {_loading = false, updateItems(value)});
+        .then((value) => {
+              _loading = false,
+              updateItems(value),
+              print("items count = ${value.length}"),
+              repository.saveTodayEconomyNewsToDB(value)
+            })
+        .catchError((e) {
+      _loading = false;
+      updateItems([]);
+    });
   }
 
   @override
