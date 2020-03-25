@@ -18,6 +18,7 @@ class MainState extends State<MainPage> {
   Future<List<Article>> news;
   List<Article> items;
   bool _loading;
+  GlobalKey<MainState> _refreshKey = GlobalKey<MainState>();
 
   void updateItems(List<Article> articles) {
     setState(() {
@@ -32,11 +33,11 @@ class MainState extends State<MainPage> {
     _loadNews();
   }
 
-  void _loadNews() {
+  Future<void> _loadNews() {
     _loading = true;
     var repository = RepositoryImpl(
         NetworkDataSourceImpl(FlutterSecureStorage()), DBProvider.dbProvider);
-    repository
+    return repository
         .getTodayEconomyNews()
         .then((value) => {
               _loading = false,
@@ -53,6 +54,14 @@ class MainState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     print("buiiiiiild");
+    return RefreshIndicator(
+      key: _refreshKey,
+      child: getMainWidget(),
+      onRefresh: _loadNews,
+    );
+  }
+
+  Widget getMainWidget() {
     if (_loading) {
       return Center(child: CircularProgressIndicator());
     } else if (items == null || items.isEmpty) {
