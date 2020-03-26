@@ -39,7 +39,7 @@ class DBProvider {
           "${_ArticlesTable.KEY_DESCRIPTION} TEXT,"
           "${_ArticlesTable.KEY_URL} TEXT,"
           "${_ArticlesTable.KEY_URL_TO_IMAGE} TEXT,"
-          "${_ArticlesTable.KEY_URL_DATE} TEXT,"
+          "${_ArticlesTable.KEY_DATE} TEXT,"
           "${_ArticlesTable.KEY_URL_CONTENT} TEXT,"
           "${_ArticlesTable.KEY_SOURCE_ID} TEXT"
           ")";
@@ -76,7 +76,7 @@ class DBProvider {
 
   Future<List<Article>> getAllArticles() async {
     final db = await database;
-    var res = await db.query(_ArticlesTable.KEY_TABLE_NAME);
+    var res = await db.query(_ArticlesTable.KEY_TABLE_NAME, orderBy: "${_ArticlesTable.KEY_DATE} DESC");
     List<ArticleDB> articlesDB = res.isNotEmpty
         ? res.map((e) => ArticleDB.fromJson(e)).toList()
         : List();
@@ -128,7 +128,7 @@ class _ArticlesTable {
   static final String KEY_DESCRIPTION = "description";
   static final String KEY_URL = "url";
   static final String KEY_URL_TO_IMAGE = "urlToImage";
-  static final String KEY_URL_DATE = "publishedAt";
+  static final String KEY_DATE = "publishedAt";
   static final String KEY_URL_CONTENT = "content";
   static final String KEY_SOURCE_ID = "sourceId";
 }
