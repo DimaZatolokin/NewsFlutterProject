@@ -76,8 +76,11 @@ class AdditionalState extends State<AdditionalPage> {
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(
             flex: 1,
-            child:
-                Column(children: [getImageWidget(item), getAuthorWidget(item)]),
+            child: Column(children: [
+              getImageWidget(item),
+              getAuthorWidget(item),
+              getSourceWidget(item)
+            ]),
           ),
           Expanded(
               flex: 4,
@@ -132,6 +135,15 @@ class AdditionalState extends State<AdditionalPage> {
             maxLines: 1,
           ),
         ));
+  }
+
+  Text getSourceWidget(Article item) {
+    return Text(
+      item.source != null ? item.source.name : "",
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(fontSize: 12),
+    );
   }
 
   Image getImageWidget(Article item) {

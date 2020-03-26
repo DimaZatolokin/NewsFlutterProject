@@ -41,4 +41,5 @@ class RepositoryImpl implements Repository {
 
 class _NewsKeyWords {
   static final String ECONOMY = "economy";
+  static final String KHARKIV = "kharkiv";
 }
