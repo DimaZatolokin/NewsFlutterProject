@@ -7,12 +7,17 @@ import 'package:newsflutterprogect/data/network/network.dart';
 import 'package:newsflutterprogect/data/repository.dart';
 import 'package:newsflutterprogect/presentation/utils.dart';
 
-class AdditionalPage extends StatefulWidget {
+class HistoryPage extends StatefulWidget {
+
+  HistoryPage() {
+    print("HistoryPage()");
+  }
+
   @override
-  State<StatefulWidget> createState() => AdditionalState();
+  State<StatefulWidget> createState() => HistoryState();
 }
 
-class AdditionalState extends State<AdditionalPage> {
+class HistoryState extends State<HistoryPage> {
   Future<List<Article>> news;
   List<Article> items;
   bool _loading;

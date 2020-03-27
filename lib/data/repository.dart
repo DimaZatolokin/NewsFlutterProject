@@ -25,7 +25,7 @@ class RepositoryImpl implements Repository {
 
   @override
   Future<List<Article>> getTodayEconomyNews() {
-    return getTodayNewsByKeyWord(_NewsKeyWords.ECONOMY);
+    return getTodayNewsByKeyWord(_NewsKeyWords.ALL);
   }
 
   @override
@@ -42,4 +42,5 @@ class RepositoryImpl implements Repository {
 class _NewsKeyWords {
   static final String ECONOMY = "economy";
   static final String KHARKIV = "kharkiv";
+  static final String ALL = "all";
 }

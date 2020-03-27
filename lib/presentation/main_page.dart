@@ -8,21 +8,37 @@ import 'package:newsflutterprogect/data/repository.dart';
 import 'package:newsflutterprogect/presentation/utils.dart';
 
 class MainPage extends StatefulWidget {
+  List<Article> _articles;
+
+  _updateArticles(List<Article> items) {
+    _articles = items;
+  }
+
+  MainPage() {
+    print("MainPage()");
+  }
+
   @override
   State<StatefulWidget> createState() {
-    return MainState();
+    return MainState(_articles, _updateArticles);
   }
 }
 
 class MainState extends State<MainPage> {
   Future<List<Article>> news;
   List<Article> items;
-  bool _loading;
+  bool _loading = false;
   GlobalKey<MainState> _refreshKey = GlobalKey<MainState>();
+  Function(List<Article> items) _updateParentItems;
+
+  MainState(List<Article> articles, this._updateParentItems) {
+    items = articles;
+  }
 
   void updateItems(List<Article> articles) {
     setState(() {
       items = articles;
+      _updateParentItems.call(articles);
     });
   }
 
@@ -30,7 +46,9 @@ class MainState extends State<MainPage> {
   void initState() {
     super.initState();
     print("initState()");
-    _loadNews();
+    if (items == null || items.isEmpty) {
+      _loadNews();
+    }
   }
 
   Future<void> _loadNews() {

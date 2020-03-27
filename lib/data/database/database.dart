@@ -85,7 +85,6 @@ class DBProvider {
       SourceDB sourceDB = await getSourceById(articleDB.sourceId);
       Article article = articleMapper.mapFromDBLayer(articleDB);
       article.source = sourceMapper.mapFromDBLayer(sourceDB);
-      print("sourceDB.name = ${sourceDB == null ? "nullll" : sourceDB.name}");
       articles.add(article);
     }
     return articles;
@@ -102,9 +101,6 @@ class DBProvider {
     final db = await database;
     var res = await db.query(_SourcesTable.KEY_TABLE_NAME,
         where: "id=?", whereArgs: [sourceId]);
-    print("sourceId = ${sourceId}");
-    print("res.isNotEmpty = ${res.isNotEmpty}");
-    print("(res.first = ${res.isNotEmpty ? res.first : "EMPTY"}");
     return res.isNotEmpty ? SourceDB.fromJson(res.first) : null;
   }
 

@@ -6,6 +6,7 @@ import 'package:newsflutterprogect/presentation/main_page.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("HOME BUILD");
     return MaterialApp(
       home: DefaultTabController(
           length: 2,
@@ -25,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             body: TabBarView(
               children: <Widget>[
                 MainPage(),
-                AdditionalPage(),
+                HistoryPage(),
               ],
             ),
           )),
